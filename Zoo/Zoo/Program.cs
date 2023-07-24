@@ -22,6 +22,8 @@ namespace Zoo
             const string CommandAviaryCows = "4";
             const string CommandExit = "5";
 
+            Aviary aviary = new Aviary();
+
             bool isWork = true;
 
             while (isWork)
@@ -39,22 +41,22 @@ namespace Zoo
                 switch (userInput)
                 {
                     case CommandAviaryTigers:
-                        AviaryTigers();
+                        aviary.ShowTigtes();
 
                         break;
 
                     case CommandAviaryMonkeys:
-                        AviaryMonkeys();
+                        aviary.ShowMonkeys();
 
                         break;
 
                     case CommandAviaryElephats:
-                        AviaryElephats();
+                        aviary.ShowElephats();
 
                         break;
 
                     case CommandAviaryCows:
-                        AviaryCows();
+                        aviary.ShowCows();
 
                         break;
 
@@ -70,78 +72,146 @@ namespace Zoo
                         break;
                 }
             }
-
-        }
-
-        private void AviaryTigers()
-        {
-            Console.WriteLine("Вольер с тиграми");
-            Tiger tiger = new Tiger();
-        }
-
-        private void AviaryMonkeys()
-        {
-            Console.WriteLine("Вольер с обезьянами");
-            Monkey monkey = new Monkey();
-        }
-
-        private void AviaryElephats()
-        {
-            Console.WriteLine("Вольер с слонами");
-            Elephant elephant = new Elephant();
-        }
-
-        private void AviaryCows()
-        {
-            Console.WriteLine("Вольер с коровами");
-            Cow cow = new Cow();
-        }
-
-    }
-
-    abstract class Animals
-    {
-        protected Random _random = new Random();
-
-        protected string _gender;
-        protected string _makesSound;
-
-        protected int _minAnimals = 3;
-        protected int _maxAnimals = 30;
-        protected int _countAnimals;
-    }
-
-    class Tiger : Animals
-    {
-        public Tiger()
-        {
-            Console.WriteLine($"Количество {GetType().Name}: {_countAnimals = _random.Next(_minAnimals, _maxAnimals)} пол: {_gender = "Муж"} {_gender = "Жен"} издает звук: {_makesSound = "P-P-P"}");
-        }
-
-    }
-
-    class Monkey : Animals
-    {
-        public Monkey()
-        {
-            Console.WriteLine($"Количество {GetType().Name}: {_countAnimals = _random.Next(_minAnimals, _maxAnimals)} пол: {_gender = "Муж"} {_gender = "Жен"} издает звук: {_makesSound = "У-А-А"}");
         }
     }
 
-    class Elephant : Animals
+    class Aviary
     {
-        public Elephant()
-        {
-            Console.WriteLine($"Количество {GetType().Name}: {_countAnimals = _random.Next(_minAnimals, _maxAnimals)} пол: {_gender = "Муж"} {_gender = "Жен"} издает звук: {_makesSound = "У-У-У"}");
-        }
-    }
+        private static Random _random = new Random();
 
-    class Cow : Animals
-    {
-        public Cow()
+        private List<Animals> tigres = new List<Animals>();
+        private List<Animals> _monkeys = new List<Animals>();
+        private List<Animals> _elephats = new List<Animals>();
+        private List<Animals> _cows = new List<Animals>();
+
+        private int _minAnimals = 3;
+        private int _maxAnimals = 30;
+        private int _count;
+        private int _shift = 1;
+
+        public Aviary()
         {
-            Console.WriteLine($"Количество {GetType().Name}: {_countAnimals = _random.Next(_minAnimals, _maxAnimals)} пол: {_gender = "Муж"} {_gender = "Жен"} издает звук: {_makesSound = "М-У"}");
+            Create(0, tigres);
+            Create(1, _monkeys);
+            Create(2, _elephats);
+            Create(3, _cows);
+        }
+
+        public void ShowTigtes()
+        {
+            for (int i = 0; i < tigres.Count; i++)
+            {
+                Console.Write($"{i + _shift} ");
+                tigres[i].ShowInfo();
+            }
+        }
+
+        public void ShowMonkeys()
+        {
+            for (int i = 0; i < _monkeys.Count; i++)
+            {
+                Console.Write($"{i + _shift} ");
+                _monkeys[i].ShowInfo();
+            }
+        }
+
+        public void ShowElephats()
+        {
+            for (int i = 0; i < _elephats.Count; i++)
+            {
+                Console.Write($"{i + _shift} ");
+                _elephats[i].ShowInfo();
+            }
+        }
+
+        public void ShowCows()
+        {
+            for (int i = 0; i < _cows.Count; i++)
+            {
+                Console.Write($"{i + _shift} ");
+                _cows[i].ShowInfo();
+            }
+        }
+
+        private void Create(int index, List<Animals> animals)
+        {
+            Animals[] arrayAnimals = { new Tigre("", ""), new Monkey("", ""), new Elephant("", ""), new Cow("", "") };
+
+            _count = _random.Next(_minAnimals, _maxAnimals);
+
+            for (int i = 0; i < _count; i++)
+            {
+                animals.Add(arrayAnimals[index].Clone());
+            }
         }
     }
 }
+
+abstract class Animals
+{
+    protected static Random Random = new Random();
+    protected static string Male = "Самец(Муж)";
+    protected static string Female = "Самка(Жен)";
+
+    protected string Gender;
+    protected string MakesSound;
+
+    protected string[] ArrayGender = { Male, Female };
+
+    protected int MaxValue = 2;
+
+    public Animals(string gender, string makesSound)
+    {
+        Gender = gender;
+        MakesSound = makesSound;
+    }
+
+    public abstract Animals Clone();
+
+    public void ShowInfo()
+    {
+        Console.WriteLine($"Животное: {GetType().Name}, Пол: {Gender}, Звук: {MakesSound}");
+    }
+}
+
+class Tigre : Animals
+{
+    public Tigre(string gender, string makesSound) : base(gender, makesSound) { }
+
+    public override Animals Clone()
+    {
+        return new Tigre(ArrayGender[Random.Next(MaxValue)], "P-P-P");
+    }
+}
+
+class Monkey : Animals
+{
+    public Monkey(string gender, string makesSound) : base(gender, makesSound) { }
+
+    public override Animals Clone()
+    {
+        return new Monkey(ArrayGender[Random.Next(MaxValue)], "У-А-А");
+    }
+}
+
+class Elephant : Animals
+{
+    public Elephant(string gender, string makesSound) : base(gender, makesSound) { }
+
+    public override Animals Clone()
+    {
+        return new Elephant(ArrayGender[Random.Next(MaxValue)], "У-У-У");
+    }
+}
+
+class Cow : Animals
+{
+    public Cow(string gender, string makesSound) : base(gender, makesSound) { }
+
+    public override Animals Clone()
+    {
+        return new Cow(ArrayGender[Random.Next(MaxValue)], "Му-Му");
+    }
+}
+
 
