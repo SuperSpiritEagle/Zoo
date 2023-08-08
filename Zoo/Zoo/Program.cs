@@ -15,6 +15,16 @@ namespace Zoo
 
 class ZooLand
 {
+    private Aviary _aviary = new Aviary();
+
+    public ZooLand()
+    {
+        Create(_aviary.CreateTigre, _aviary.Tigres);
+        Create(_aviary.CreateMonkey, _aviary.Monkeys);
+        Create(_aviary.CreateElephat, _aviary.Elephats);
+        Create(_aviary.CreateCow, _aviary.Cows);
+    }
+
     public void Play()
     {
         const string CommandAviaryTigers = "1";
@@ -22,11 +32,6 @@ class ZooLand
         const string CommandAviaryElephats = "3";
         const string CommandAviaryCows = "4";
         const string CommandExit = "5";
-
-        AviaryTigre aviaryTigter = new AviaryTigre();
-        AviaryMonkey aviaryMonkey = new AviaryMonkey();
-        AviaryElephat aviaryElephat = new AviaryElephat();
-        AviaryCow aviaryCow = new AviaryCow();
 
         bool isWork = true;
 
@@ -45,22 +50,22 @@ class ZooLand
             switch (userInput)
             {
                 case CommandAviaryTigers:
-                    aviaryTigter.ShowAnimals(aviaryTigter.Tigres);
+                    ShowAnimals(_aviary.Tigres);
 
                     break;
 
                 case CommandAviaryMonkeys:
-                    aviaryMonkey.ShowAnimals(aviaryMonkey.Monkeys);
+                    ShowAnimals(_aviary.Monkeys);
 
                     break;
 
                 case CommandAviaryElephats:
-                    aviaryElephat.ShowAnimals(aviaryElephat.Elephats);
+                    ShowAnimals(_aviary.Elephats);
 
                     break;
 
                 case CommandAviaryCows:
-                    aviaryCow.ShowAnimals(aviaryCow.Cows);
+                    ShowAnimals(_aviary.Cows);
 
                     break;
 
@@ -77,78 +82,47 @@ class ZooLand
             }
         }
     }
-}
 
-abstract class Aviary
-{
-    protected static Random _random = new Random();
-
-    protected int _shift = 1;
-
-    public void ShowAnimals(List<Animals> animals)
+    private void ShowAnimals(List<Animals> animals)
     {
+        int shift = 1;
+
         for (int i = 0; i < animals.Count; i++)
         {
-            Console.Write($"{i + _shift} ");
+            Console.Write($"{i + shift} ");
             animals[i].ShowInfo();
         }
     }
 
-    protected void Create(int index, List<Animals> animals)
+    private void Create(int index, List<Animals> animals)
     {
-        int _minAnimals = 3;
-        int _maxAnimals = 30;
-        int _count;
+        Random random = new Random();
+        int min = 3;
+        int max = 30;
+        int numberAnimals;
 
         Animals[] arrayAnimals = { new Tigre(), new Monkey(), new Elephant(), new Cow() };
 
-        _count = _random.Next(_minAnimals, _maxAnimals);
+        numberAnimals = random.Next(min, max);
 
-        for (int i = 0; i < _count; i++)
+        for (int i = 0; i < numberAnimals; i++)
         {
             animals.Add(arrayAnimals[index].Clone());
         }
     }
 }
 
-class AviaryTigre : Aviary
+class Aviary
 {
-    public AviaryTigre()
-    {
-        Create(0, Tigres);
-    }
-
     public List<Animals> Tigres { get; } = new List<Animals>();
-}
-
-class AviaryMonkey : Aviary
-{
-    public AviaryMonkey()
-    {
-        Create(1, Monkeys);
-    }
-
     public List<Animals> Monkeys { get; } = new List<Animals>();
-}
-
-class AviaryElephat : Aviary
-{
-    public AviaryElephat()
-    {
-        Create(2, Elephats);
-    }
-
     public List<Animals> Elephats { get; } = new List<Animals>();
-}
-
-class AviaryCow : Aviary
-{
-    public AviaryCow()
-    {
-        Create(3, Cows);
-    }
-
     public List<Animals> Cows { get; } = new List<Animals>();
+
+    public int CreateTigre { get; } = 0;
+    public int CreateMonkey { get; } = 1;
+    public int CreateElephat { get; } = 2;
+    public int CreateCow { get; } = 3;
 }
 
 abstract class Animals
@@ -212,5 +186,3 @@ class Cow : Animals
 
     public override Animals Clone() => new Cow();
 }
-
-
