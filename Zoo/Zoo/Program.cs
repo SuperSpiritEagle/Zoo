@@ -17,10 +17,10 @@ class ZooLand
 {
     private Aviary _aviary = new Aviary();
 
-    private List<Animals> _tigres = new List<Animals>();
-    private List<Animals> _monkeys = new List<Animals>();
-    private List<Animals> _elephats = new List<Animals>();
-    private List<Animals> _cows = new List<Animals>();
+    private List<Animal> _tigres = new List<Animal>();
+    private List<Animal> _monkeys = new List<Animal>();
+    private List<Animal> _elephats = new List<Animal>();
+    private List<Animal> _cows = new List<Animal>();
 
     private int _tigre = 0;
     private int _monkey = 1;
@@ -96,7 +96,7 @@ class ZooLand
 
 class Aviary
 {
-    public void Create(int animal, List<Animals> animals)
+    public void Create(int animal, List<Animal> animals)
     {
         Random random = new Random();
 
@@ -104,7 +104,7 @@ class Aviary
         int max = 30;
         int numberAnimals;
 
-        Animals[] arrayAnimals = { new Tigre("", ""), new Monkey("", ""), new Elephant("", ""), new Cow("", "") };
+        Animal[] arrayAnimals = { new Tigre("", ""), new Monkey("", ""), new Elephant("", ""), new Cow("", "") };
 
         numberAnimals = random.Next(min, max);
 
@@ -114,7 +114,7 @@ class Aviary
         }
     }
 
-    public void ShowAnimals(List<Animals> animals,string animal)
+    public void ShowAnimals(List<Animal> animals,string animal)
     {
         int shift = 1;
 
@@ -127,7 +127,7 @@ class Aviary
     }
 }
 
-abstract class Animals
+abstract class Animal
 {
     protected string Gender;
     protected string MakesSound;
@@ -136,7 +136,7 @@ abstract class Animals
 
     protected string[] _arrayGender = { "Самец(Муж)", "Самка(Жен)" };
 
-    public Animals(string gender, string makesSound)
+    public Animal(string gender, string makesSound)
     {
         Gender = _arrayGender[_random.Next(_arrayGender.Length)];
         MakesSound = makesSound;
@@ -147,7 +147,7 @@ abstract class Animals
     public string AnimalElephant { get; } = "Слон";
     public string AnimalCow { get; } = "Корова";
 
-    public abstract Animals Clone();
+    public abstract Animal Clone();
 
     public void ShowInfo()
     {
@@ -155,31 +155,31 @@ abstract class Animals
     }
 }
 
-class Tigre : Animals
+class Tigre : Animal
 {
     public Tigre(string gender, string makesSound) : base(gender, makesSound) { }
 
-    public override Animals Clone()=> new Tigre(_arrayGender[_random.Next(_arrayGender.Length)], "P-P-P");
+    public override Animal Clone()=> new Tigre(_arrayGender[_random.Next(_arrayGender.Length)], "P-P-P");
 }
 
 
-class Monkey : Animals
+class Monkey : Animal
 {
     public Monkey(string gender, string makesSound) : base(gender, makesSound) { }
 
-    public override Animals Clone()=> new Monkey(_arrayGender[_random.Next(_arrayGender.Length)], "У-А-А");
+    public override Animal Clone()=> new Monkey(_arrayGender[_random.Next(_arrayGender.Length)], "У-А-А");
 }
 
-class Elephant : Animals
+class Elephant : Animal
 {
     public Elephant(string gender, string makesSound) : base(gender, makesSound) { }
 
-    public override Animals Clone() => new Elephant(_arrayGender[_random.Next(_arrayGender.Length)], "У-У-У");
+    public override Animal Clone() => new Elephant(_arrayGender[_random.Next(_arrayGender.Length)], "У-У-У");
 }
 
-class Cow : Animals
+class Cow : Animal
 {
     public Cow(string gender, string makesSound) : base(gender, makesSound) { }
 
-    public override Animals Clone() => new Cow(_arrayGender[_random.Next(_arrayGender.Length)], "МУ");
+    public override Animal Clone() => new Cow(_arrayGender[_random.Next(_arrayGender.Length)], "МУ");
 }
